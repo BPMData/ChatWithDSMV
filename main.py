@@ -4,13 +4,9 @@ import openai  # for calling the OpenAI API
 import pandas as pd  # for storing text and embeddings data
 import tiktoken  # for counting tokens
 from scipy import spatial  # for calculating vector similarities for search
-import os
 import smtplib
 import ssl
-
-
-
-# Declare constants
+from google.cloud import storage
 
 EMBEDDING_MODEL = "text-embedding-ada-002"
 GPT_MODEL = "gpt-3.5-turbo"
@@ -36,8 +32,29 @@ GMAIL_SEND_KEY = access_secret_version("projects/426441628548/secrets/GMail_Send
 
 # Load the embeddings CSV file, which was pre-generated with a chunk hyperparameter length of 400.
 # This part is fairly slow.
-df = pd.read_csv('dsmv_400.csv')
-df['embedding'] = df['embedding'].apply(ast.literal_eval)
+@st.cache_resource
+def read(bucket_name, blob_name):
+    """Write and read a blob from GCS using file-like IO"""
+    # The ID of your GCS bucket
+    # bucket_name = "your-bucket-name"
+
+    # The ID of your new GCS object
+    # blob_name = "storage-object-name"
+
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+
+    # Mode can be specified as wb/rb for bytes mode.
+    # See: https://docs.python.org/3/library/io.html
+
+    with blob.open("r", encoding='utf-8') as f:
+        df = pd.read_csv(f)
+    df['embedding'] = df['embedding'].apply(ast.literal_eval)
+    return df
+
+
+df = read('chatwithdsm5.appspot.com', 'dsmv_400.csv')
 
 # Define our search function:
 '''Search
