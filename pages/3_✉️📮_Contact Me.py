@@ -1,9 +1,10 @@
 import streamlit as st
+st.set_page_config(page_title="Contact the Coder", page_icon='✉️', layout='wide')
 from streamlit_extras.switch_page_button import switch_page
 from streamlit_extras.colored_header import colored_header
 from main import send_email
 
-st.set_page_config(page_title="Contact the Coder", page_icon='✉️', layout='wide')
+
 st.title("Contact Me:")
 
 

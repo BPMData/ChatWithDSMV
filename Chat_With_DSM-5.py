@@ -5,8 +5,8 @@ import pandas as pd  # for storing text and embeddings data
 from main import ask_stream
 from streamlit_extras.colored_header import colored_header
 
-st.title("🤖⇢📚Ψ⇢💬 Talk to ChatGPT after it has 'read' the DSM-5.")
-colored_header(label="Powered by ChatGPT-3.5-Turbo. Best viewed on PC or tablet.", description="", color_name="orange-70")
+st.title("🤖⇢📚Ψ⇢💬")
+colored_header(label="Using AI to 'talk to' the DSM-5.", description="", color_name="orange-70")
 
 # Declare our constants:
 EMBEDDING_MODEL = "text-embedding-ada-002"
