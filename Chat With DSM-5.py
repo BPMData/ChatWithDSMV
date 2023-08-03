@@ -1,9 +1,9 @@
 import streamlit as st
 st.set_page_config(page_title="DSM-5 Chat", page_icon='Ψ', layout='wide')
+import ast  # for converting embeddings saved as strings back to arrays
+import pandas as pd  # for storing text and embeddings data
 from main import ask_stream
 from streamlit_extras.colored_header import colored_header
-
-
 
 st.title("🤖⇢📚Ψ⇢💬 Talk to ChatGPT after it has 'read' the DSM-5.")
 colored_header(label="Powered by ChatGPT-3.5-Turbo. Best viewed on PC or tablet.", description="", color_name="orange-70")
@@ -11,6 +11,7 @@ colored_header(label="Powered by ChatGPT-3.5-Turbo. Best viewed on PC or tablet.
 # Declare our constants:
 EMBEDDING_MODEL = "text-embedding-ada-002"
 GPT_MODEL = "gpt-3.5-turbo"
+
 
 # Set a default model
 if "openai_model" not in st.session_state:

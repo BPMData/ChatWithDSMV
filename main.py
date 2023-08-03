@@ -6,55 +6,25 @@ import tiktoken  # for counting tokens
 from scipy import spatial  # for calculating vector similarities for search
 import smtplib
 import ssl
-from google.cloud import storage
 
 EMBEDDING_MODEL = "text-embedding-ada-002"
 GPT_MODEL = "gpt-3.5-turbo"
 
-# Defining secrets manager and setting keys
-def access_secret_version(secret_version_id):
-    """Return the value of a secret's version"""
-    from google.cloud import secretmanager
 
-    # Create the Secret Manager client.
-    client = secretmanager.SecretManagerServiceClient()
-
-    # Access the secret version.
-    response = client.access_secret_version(name=secret_version_id)
-
-    # Return the decoded payload.
-    return response.payload.data.decode('UTF-8')
-
-openai.api_key = access_secret_version("projects/426441628548/secrets/OPENAI_API_KEY_GOOGLE_SECRET/versions/latest")
-
-GMAIL_SEND_KEY = access_secret_version("projects/426441628548/secrets/GMail_SendKey/versions/latest")
-
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+GMAIL_SEND_KEY = st.secrets["GMAIL_SEND_KEY"]
 
 # Load the embeddings CSV file, which was pre-generated with a chunk hyperparameter length of 400.
 # This part is fairly slow.
+
 @st.cache_resource
-def read(bucket_name, blob_name):
-    """Write and read a blob from GCS using file-like IO"""
-    # The ID of your GCS bucket
-    # bucket_name = "your-bucket-name"
-
-    # The ID of your new GCS object
-    # blob_name = "storage-object-name"
-
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-
-    # Mode can be specified as wb/rb for bytes mode.
-    # See: https://docs.python.org/3/library/io.html
-
-    with blob.open("r", encoding='utf-8') as f:
-        df = pd.read_csv(f)
+def load_data(file_path):
+    df = pd.read_csv(file_path)
     df['embedding'] = df['embedding'].apply(ast.literal_eval)
     return df
 
+df = load_data('https://raw.githubusercontent.com/BPMData/ChatWithDSMV/master/dsmv_400.csv')
 
-df = read('chatwithdsm5.appspot.com', 'dsmv_400.csv')
 
 # Define our search function:
 '''Search
@@ -68,7 +38,6 @@ Returns two lists:
 The top N texts, ranked by relevance
 Their corresponding relevance scores
 '''
-
 
 def strings_ranked_by_relatedness(
     query: str,
@@ -91,7 +60,6 @@ def strings_ranked_by_relatedness(
     return strings[:top_n], relatednesses[:top_n]
 
 # Use the embedding file to generate context:
-
 
 def num_tokens(text: str, model: str = GPT_MODEL) -> int:
     """Return the number of tokens in a string."""
