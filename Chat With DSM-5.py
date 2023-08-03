@@ -11,7 +11,7 @@ colored_header(label="Powered by ChatGPT-3.5-Turbo. Best viewed on PC or tablet.
 # Declare our constants:
 EMBEDDING_MODEL = "text-embedding-ada-002"
 GPT_MODEL = "gpt-3.5-turbo"
-
+# Ok
 
 # Set a default model
 if "openai_model" not in st.session_state:
