@@ -25,8 +25,8 @@ def access_secret_version(secret_version_id):
     # Return the decoded payload.
     return response.payload.data.decode('UTF-8')
 
+openai.api_key = access_secret_version("projects/426441628548/secrets/OPENAI_API_KEY_GOOGLE_SECRET/versions/latest")
 
-OPENAI_API_KEY = access_secret_version("projects/426441628548/secrets/OPENAI_API_KEY_GOOGLE_SECRET/versions/latest")
 GMAIL_SEND_KEY = access_secret_version("projects/426441628548/secrets/GMail_SendKey/versions/latest")
 
 
