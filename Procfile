@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run "Chat With DSM-5.py"
+web: sh setup.sh && streamlit run Chat_With_DSM-5.py

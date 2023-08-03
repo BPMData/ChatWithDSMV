@@ -15,4 +15,4 @@ c.write("In theory, this web app would work with any text, from a book, to a ser
 st.divider()
 take_me_home = st.button("Take me home!")
 if take_me_home:
-    switch_page("Chat With DSM-5")
+    switch_page("Chat_With_DSM-5")
