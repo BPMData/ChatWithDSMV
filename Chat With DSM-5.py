@@ -6,8 +6,7 @@ from streamlit_extras.colored_header import colored_header
 
 
 st.title("🤖⇢📚Ψ⇢💬 Talk to ChatGPT after it has 'read' the DSM-5.")
-st.subheader("Powered by ChatGPT-3.5-Turbo. Best viewed on PC or tablet.")
-colored_header(label='Ask a question below, and ChatGPT will answer it using its knowledge of the DSM-5!', description="", color_name="orange-70")
+colored_header(label="Powered by ChatGPT-3.5-Turbo. Best viewed on PC or tablet.", description="", color_name="orange-70")
 
 # Declare our constants:
 EMBEDDING_MODEL = "text-embedding-ada-002"
