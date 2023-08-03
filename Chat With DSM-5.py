@@ -11,29 +11,29 @@ st.set_page_config(page_title="DSM-5 Chat", page_icon='Ψ', layout='wide')
 
 from google.cloud import storage
 
-@st.cache_resource
-def read(bucket_name, blob_name):
-    """Write and read a blob from GCS using file-like IO"""
-    # The ID of your GCS bucket
-    # bucket_name = "your-bucket-name"
-
-    # The ID of your new GCS object
-    # blob_name = "storage-object-name"
-
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-
-    # Mode can be specified as wb/rb for bytes mode.
-    # See: https://docs.python.org/3/library/io.html
-
-    with blob.open("r", encoding='utf-8') as f:
-        df = pd.read_csv(f)
-    df['embedding'] = df['embedding'].apply(ast.literal_eval)
-    return df
-
-
-df = read('chatwithdsm5.appspot.com', 'dsmv_400.csv')
+# @st.cache_resource
+# def read(bucket_name, blob_name):
+#     """Write and read a blob from GCS using file-like IO"""
+#     # The ID of your GCS bucket
+#     # bucket_name = "your-bucket-name"
+#
+#     # The ID of your new GCS object
+#     # blob_name = "storage-object-name"
+#
+#     storage_client = storage.Client()
+#     bucket = storage_client.bucket(bucket_name)
+#     blob = bucket.blob(blob_name)
+#
+#     # Mode can be specified as wb/rb for bytes mode.
+#     # See: https://docs.python.org/3/library/io.html
+#
+#     with blob.open("r", encoding='utf-8') as f:
+#         df = pd.read_csv(f)
+#     df['embedding'] = df['embedding'].apply(ast.literal_eval)
+#     return df
+#
+#
+# df = read('chatwithdsm5.appspot.com', 'dsmv_400.csv')
 
 
 st.title("🤖⇢📚Ψ⇢💬 Talk to ChatGPT after it has 'read' the DSM-5.")
@@ -45,13 +45,13 @@ EMBEDDING_MODEL = "text-embedding-ada-002"
 GPT_MODEL = "gpt-3.5-turbo"
 
 
-# @st.cache_resource
-# def load_data(file_path):
-#     df = pd.read_csv(file_path)
-#     df['embedding'] = df['embedding'].apply(ast.literal_eval)
-#     return df
+@st.cache_resource
+def load_data(file_path):
+    df = pd.read_csv(file_path)
+    df['embedding'] = df['embedding'].apply(ast.literal_eval)
+    return df
 
-
+df = load_data('https://raw.githubusercontent.com/BPMData/ChatWithDSMV/master/dsmv_400.csv')
 
 
 # Set a default model
